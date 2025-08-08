@@ -4,7 +4,9 @@
   "description": "A Solar System Simulator",
   "main": "index.js",
   "scripts": {
-    "dev": "vite --host 127.0.0.1"
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview"
   },
     "scripts": {
     "dev": "vite --host 127.0.0.1",
