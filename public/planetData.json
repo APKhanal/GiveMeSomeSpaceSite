@@ -3,7 +3,7 @@
     "name": "SOL",
     "size": 1.45,
     "distance": 0,
-    "texture": "/textures/sun.jpg",
+    "texture": "textures/sun.jpg",
     "speed": 0.08264,
     "rotationSpeed": 0.02,
     "initialAngleDeg": 51.57,

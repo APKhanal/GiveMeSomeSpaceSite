@@ -104,8 +104,8 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
 
 // Load textures for the sun and asteroid
-const sunTexture = textureLoader.load("/textures/sun.jpg");
-const asteroidTexture = textureLoader.load("/textures/asteroid.jpg");
+const sunTexture = textureLoader.load("textures/sun.jpg");
+const asteroidTexture = textureLoader.load("textures/asteroid.jpg");
 
 const sizeMultiplier = 0.1;
 // Create a big ball for the sun
@@ -151,7 +151,7 @@ function initializePlanets() {
       const ringMaterial = new THREE.MeshStandardMaterial({
     
         side: THREE.DoubleSide,
-        map:  textureLoader.load("/textures/image.png"),
+        map:  textureLoader.load("textures/image.png"),
         roughness: 1,
         metalness: 0,
     
@@ -168,7 +168,7 @@ function initializePlanets() {
       const moonMaterial = new THREE.MeshStandardMaterial({
     
         side: THREE.DoubleSide,
-        map:  textureLoader.load("/textures/moon.png"),
+        map:  textureLoader.load("textures/moon.png"),
         roughness: 1,
         metalness: 0,
     
