@@ -1,4 +1,19 @@
 [
+    {
+    "name": "SOL",
+    "size": 1.45,
+    "distance": 0,
+    "texture": "/textures/sun.jpg",
+    "speed": 0.08264,
+    "rotationSpeed": 0.02,
+    "initialAngleDeg": 51.57,
+    "temperature": "5772°K",
+    "mass": 1.989,
+    "exponent": 30,
+    "radius": 2440,
+    "period": "N/A",
+    "semiMajorAxis": "N/A"
+  },
   {
     "name": "MERCURY",
     "size": 0.5,

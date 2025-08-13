@@ -104,8 +104,8 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
 
 // Load textures for the sun and asteroid
-const sunTexture = textureLoader.load("textures/sun.jpg");
-const asteroidTexture = textureLoader.load("textures/asteroid.jpg");
+const sunTexture = textureLoader.load("/textures/sun.jpg");
+const asteroidTexture = textureLoader.load("/textures/asteroid.jpg");
 
 const sizeMultiplier = 0.1;
 // Create a big ball for the sun
@@ -117,6 +117,8 @@ scene.add(sun);
 // Arrays to hold planet meshes and orbits
 const planets = [];
 const orbits = [];
+const rings = [];
+const moons=[];
 const labels = []; // Array to hold label elements
 
 let planetData = [];
@@ -139,11 +141,54 @@ function initializePlanets() {
       metalness: 0,
     });
     const planet = new THREE.Mesh(geometry, planetMaterial);
+    
     planet.position.set(data.distance, 0, 0);
+    if (data.name=="SATURN")
+      var leometry = new THREE.CylinderGeometry(  data.size * sizeMultiplier + 0.025 ,
+      data.size * sizeMultiplier + 0.11,
+      0.01, 128,32,true ); 
+      
+      const ringMaterial = new THREE.MeshStandardMaterial({
+    
+        side: THREE.DoubleSide,
+        map:  textureLoader.load("/textures/image.png"),
+        roughness: 1,
+        metalness: 0,
+    
+        transparent: true
+      });
+      
+      const ring = new THREE.Mesh(leometry, ringMaterial);
+      ring.position.set(data.distance, 0, 0);
+    if (data.name=="EARTH")
+      var teometry = new THREE.SphereGeometry(  (data.size * sizeMultiplier)/4,
+      32,
+      32); 
+      
+      const moonMaterial = new THREE.MeshStandardMaterial({
+    
+        side: THREE.DoubleSide,
+        map:  textureLoader.load("/textures/moon.png"),
+        roughness: 1,
+        metalness: 0,
+    
+        transparent: true
+      });
+      
+      const moon = new THREE.Mesh(teometry, moonMaterial);
+      moon.position.set(data.distance, 0, 0);
+    
+    //const material = new THREE.MeshBasicMaterial( { color: 0xffff00, side: THREE.DoubleSide } );
+    //const mesh = new THREE.Mesh( geometry, material ); scene.add( mesh );
+
+
 
     // Store the data in userData
     planet.userData = data;
+    planet.userData = data;
     scene.add(planet);
+    scene.add(ring);
+    scene.add(moon);
 
     // Compute initial angle in radians
     const initialAngleRad = (data.initialAngleDeg * Math.PI) / 180;
@@ -155,6 +200,25 @@ function initializePlanets() {
       angle: initialAngleRad,
       rotationSpeed: data.rotationSpeed,
     });
+      rings.push({
+      ring,
+      distance: data.distance,
+      speed: data.speed,
+      angle: initialAngleRad,
+      rotationSpeed: data.rotationSpeed,
+    });
+    moons.push({
+      moon,
+      
+      distance: data.distance,
+      d2: (data.size* sizeMultiplier) + 0.0757 ,
+      speed: data.speed,
+      s2: data.speed*12,
+      angle: initialAngleRad,
+      a2: initialAngleRad,
+      rotationSpeed: data.rotationSpeed,
+    });
+
 
     // Create the label as an HTML div
     const labelDiv = document.createElement("div");
@@ -239,7 +303,7 @@ function createAsteroidBelt() {
   }
 }
 const sunLight = new THREE.PointLight(0xffffff, 4, 500000, 0);
-sunLight.position.set(0, 0, 0);
+sunLight.position.set(0,0.05, 0);
 sunLight.castShadow = true; // Enable shadow casting
 scene.add(sunLight);
 
@@ -372,6 +436,27 @@ function animate() {
       );
       p.planet.rotation.y += p.rotationSpeed * speedMultiplier;
     });
+
+        rings.forEach((r) => {
+      r.angle += r.speed * speedMultiplier;
+      r.ring.position.set(
+        Math.cos(r.angle) * r.distance,
+        0,
+        Math.sin(r.angle) * r.distance
+      );
+
+    });
+            moons.forEach((r) => {
+      r.a2 += r.s2 * speedMultiplier;
+      r.angle += r.speed * speedMultiplier;
+      r.moon.position.set(
+        (Math.cos(r.angle) * r.distance)+(Math.cos(r.a2) * r.d2),
+        0,
+        (Math.sin(r.angle) * r.distance) +  (Math.sin(r.a2) * r.d2)
+      );
+
+    });
+
 
     // Update asteroid belt
     asteroidBelt.children.forEach((asteroid) => {
@@ -608,7 +693,7 @@ function showPopup(data) {
   popup.appendChild(massPara);
 
   const radiusPara = document.createElement("p");
-  radiusPara.innerHTML = `<strong>Radius:</strong> ${data.radius} kg`;
+  radiusPara.innerHTML = `<strong>Radius:</strong> ${data.radius} Km`;
   popup.appendChild(radiusPara);
 
   const periodPara = document.createElement("p");
@@ -639,7 +724,7 @@ function showPopup(data) {
 
     // Resume the simulation
     speedMultiplier = previousSpeedMultiplier || 0.1;
-
+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
     // Reset camera position
     isCameraMoving = true;
     cameraMoveStartTime = performance.now();
